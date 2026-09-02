@@ -4,8 +4,8 @@ import Footer from "../components/Footer";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
-import Register from "../login/Register";  /* Link de registro de usuario*/
-import InicioSesion from "../login/InicioSesion"; /* Link de inicio de sesion*/ 
+import Register from "../login/Register";  /* Link de registro de usuario no eliminar*/
+import InicioSesion from "../login/InicioSesion"; /* Link de inicio de sesion no eliminar */ 
 
 const espacios = [
   { nombre: "Espacios comunes (10 Aulas comunes)", cupo: 100 },
