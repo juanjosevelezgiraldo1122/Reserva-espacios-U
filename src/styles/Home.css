@@ -1,0 +1,259 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
+
+.pagina {
+  --naranja: #e2611f;
+  --naranja-oscuro: #b94b16;
+  --carbon: #232324;
+  --gris: #6e6e72;
+  --gris-claro: #dbdad6;
+  --fondo-seccion: #f4f3f0;
+  --blanco: #ffffff;
+
+  font-family: 'IBM Plex Sans', system-ui, sans-serif;
+  color: var(--carbon);
+  background: var(--blanco);
+  line-height: 1.5;
+}
+
+.pagina * { box-sizing: border-box; }
+
+.pagina h1, .pagina h2, .pagina h3 {
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  margin: 0;
+}
+
+.contenedor {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* Barra superior */
+.barra-superior {
+  border-bottom: 1px solid var(--gris-claro);
+}
+.barra-superior-interior {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 0;
+}
+.marca {
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 18px;
+  letter-spacing: 0.01em;
+}
+.marca span { color: var(--naranja); }
+.navegacion {
+  display: flex;
+  gap: 28px;
+  align-items: center;
+}
+.navegacion a {
+  color: var(--gris);
+  text-decoration: none;
+  font-size: 14px;
+}
+.navegacion a:hover { color: var(--carbon); }
+.boton {
+  border: none;
+  cursor: pointer;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  border-radius: 3px;
+  padding: 10px 18px;
+}
+.boton-primario {
+  background: var(--naranja);
+  color: var(--blanco);
+}
+.boton-primario:hover { background: var(--naranja-oscuro); }
+.boton-secundario {
+  background: transparent;
+  color: var(--carbon);
+  border: 1px solid var(--gris-claro);
+}
+.boton-secundario:hover { border-color: var(--carbon); }
+
+/* Sección de bienvenida */
+.bienvenida {
+  padding: 72px 0 40px;
+}
+.bienvenida-cuadricula {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 48px;
+  align-items: end;
+}
+.bienvenida h1 {
+  font-size: 44px;
+  line-height: 1.12;
+  font-weight: 700;
+  max-width: 11ch;
+}
+.bienvenida p {
+  margin-top: 18px;
+  max-width: 42ch;
+  color: var(--gris);
+  font-size: 16px;
+}
+.bienvenida-acciones {
+  margin-top: 28px;
+  display: flex;
+  gap: 12px;
+}
+
+/* Placa de horario, estilo señalética */
+.placa {
+  background: var(--carbon);
+  color: var(--blanco);
+  padding: 22px 24px;
+  border-radius: 3px;
+}
+.placa-etiqueta {
+  font-size: 13px;
+  color: #b8b8ba;
+}
+.placa-horas {
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-size: 34px;
+  font-weight: 600;
+  margin-top: 6px;
+  letter-spacing: 0.02em;
+}
+.placa-nota {
+  margin-top: 8px;
+  font-size: 13px;
+  color: #b8b8ba;
+}
+
+/* Directorio de espacios */
+.directorio {
+  background: var(--fondo-seccion);
+  padding: 56px 0 60px;
+}
+.directorio h2 {
+  font-size: 26px;
+  font-weight: 600;
+}
+.directorio-subtitulo {
+  color: var(--gris);
+  margin-top: 8px;
+  font-size: 15px;
+  max-width: 52ch;
+}
+.lista {
+  margin-top: 32px;
+  border-top: 1px solid var(--gris-claro);
+}
+.fila {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 14px 4px;
+  border-bottom: 1px solid var(--gris-claro);
+}
+.fila-nombre {
+  font-size: 16px;
+}
+.fila-cupo {
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 18px;
+  color: var(--naranja-oscuro);
+}
+.fila-cupo-etiqueta {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-weight: 400;
+  font-size: 13px;
+  color: var(--gris);
+  margin-left: 6px;
+}
+
+/* Pasos */
+.pasos {
+  padding: 64px 0 56px;
+}
+.pasos h2 {
+  font-size: 26px;
+  font-weight: 600;
+}
+.pasos-subtitulo {
+  color: var(--gris);
+  margin-top: 8px;
+  font-size: 15px;
+  max-width: 52ch;
+}
+.pasos-lista {
+  margin-top: 36px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+}
+.paso {
+  position: relative;
+  border-left: 1px solid var(--gris-claro);
+  padding-left: 20px;
+}
+.paso:first-child {
+  border-left: none;
+  padding-left: 0;
+}
+.paso-numero {
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--naranja);
+}
+.paso-titulo {
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-size: 17px;
+  font-weight: 600;
+  margin-top: 10px;
+}
+.paso-detalle {
+  margin-top: 8px;
+  font-size: 14px;
+  color: var(--gris);
+}
+
+/* Aviso */
+.aviso {
+  border-left: 4px solid var(--naranja);
+  background: var(--fondo-seccion);
+  padding: 20px 24px;
+  margin-bottom: 64px;
+}
+.aviso-titulo {
+  font-weight: 600;
+  font-size: 15px;
+}
+.aviso-texto {
+  margin-top: 4px;
+  font-size: 14px;
+  color: var(--gris);
+}
+
+/* Pie de página */
+.pie-pagina {
+  border-top: 1px solid var(--gris-claro);
+  padding: 24px 0;
+}
+.pie-pagina-interior {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: var(--gris);
+}
+
+@media (max-width: 760px) {
+  .bienvenida-cuadricula { grid-template-columns: 1fr; }
+  .bienvenida h1 { font-size: 32px; max-width: none; }
+  .navegacion { display: none; }
+  .pasos-lista { grid-template-columns: 1fr; gap: 24px; }
+  .paso { border-left: none; padding-left: 0; border-top: 1px solid var(--gris-claro); padding-top: 18px; }
+  .paso:first-child { border-top: none; padding-top: 0; }
+  .pie-pagina-interior { flex-direction: column; gap: 6px; }
+}
