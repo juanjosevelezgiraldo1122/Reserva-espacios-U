@@ -1,0 +1,36 @@
+.pie-pagina {
+  border-top: 1px solid var(--gris-claro, #dbdad6);
+  padding: 24px 0;
+  font-family: 'IBM Plex Sans', system-ui, sans-serif;
+  color: var(--gris, #6e6e72);
+}
+
+.pie-pagina-fila {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+}
+
+.pie-pagina-fila-secundaria {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--gris-claro, #dbdad6);
+  font-size: 12px;
+}
+
+.pie-pagina-derechos {
+  color: var(--gris, #6e6e72);
+}
+
+.pie-pagina-asistencia {
+  color: var(--naranja-oscuro, #b94b16);
+  font-weight: 600;
+}
+
+@media (max-width: 760px) {
+  .pie-pagina-fila,
+  .pie-pagina-fila-secundaria {
+    flex-direction: column;
+    gap: 6px;
+  }
+}
