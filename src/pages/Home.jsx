@@ -1,141 +1,26 @@
-import React from "react";
-import "../styles/Home.css";
-import Footer from "../components/Footer";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { useNavigate } from "react-router-dom";
-import Register from "../login/Register";  /* Link de registro de usuario no eliminargit*/
-import InicioSesion from "../login/InicioSesion"; /* Link de inicio de sesion no eliminar */ 
+import { spaces } from "../data/spaces";
+import Footer from "../components/Footer";
+import "../styles/Home.css";
 
-const espacios = [
-  { nombre: "Espacios comunes (10 Aulas comunes)", cupo: 100 },
-  { nombre: "Sala de cómputo A", cupo: 30 },
-  { nombre: "Sala de cómputo B", cupo: 20 },
-  { nombre: "Sala de conferencias", cupo: 10 },
-  { nombre: "Trabajo libre", cupo: 10 },
-  { nombre: "Auditorio 1", cupo: 100 },
-  { nombre: "Auditorio 2", cupo: 200 },
-  { nombre: "Auditorio 3", cupo: 300 },
-];
-
-const pasos = [
-  {
-    numero: "1",
-    titulo: "Regístrate",
-    detalle: "Debes tener una cuenta activa antes de poder reservar cualquier espacio.",
-  },
-  {
-    numero: "2",
-    titulo: "Consulta disponibilidad",
-    detalle: "Elige el espacio que necesitas y revisa qué horarios están libres en la fecha que quieres.",
-  },
-  {
-    numero: "3",
-    titulo: "Completa tus datos",
-    detalle: "Ingresa la información mínima solicitada: motivo, número de personas y horario.",
-  },
-  {
-    numero: "4",
-    titulo: "Confirma tu solicitud",
-    detalle: "Revisa el resumen y confirma. Recibirás la reserva con el espacio y el horario asignado.",
-  },
+const steps = [
+  ["01", "Elige tu espacio", "Explora salas, aulas, laboratorios y auditorios según lo que necesitas."],
+  ["02", "Revisa disponibilidad", "Selecciona una fecha y encuentra horarios libres en tiempo real."],
+  ["03", "Confirma tu reserva", "Cuéntanos el motivo y recibe la confirmación al instante."],
 ];
 
 export default function Home() {
-  return (
-    <div className="pagina">
-      {/* Barra superior */}
-      <header className="barra-superior">
-        <div className="contenedor barra-superior-interior">
-          <div className="marca">Reserva<span>Espacios</span></div>
-          <nav className="navegacion">
-            <a href="#espacios">Espacios</a>
-            <a href="#pasos">Cómo reservar</a>
-            <button className="boton boton-secundario"><Link to="/Register">Registrarme</Link></button>
-            <button className="boton boton-primario"><Link to="/InicioSesion">Iniciar sesión</Link></button>
-          </nav>
-        </div>
-      </header>
-
-      {/* Bienvenida */}
-      <section className="bienvenida">
-        <div className="contenedor bienvenida-cuadricula">
-          <div>
-            <h1>Reserva tu espacio sin complicaciones</h1>
-            <p>
-              Consulta la disponibilidad de salas, auditorios y espacios de
-              trabajo, y confirma tu reserva en pocos pasos. Solo necesitas
-              estar registrado.
-            </p>
-            <div className="bienvenida-acciones">
-              <button className="boton boton-primario">Consultar disponibilidad</button>
-              <button className="boton boton-secundario">Ver cómo funciona</button>
-            </div>
-          </div>
-
-          <div className="placa">
-            <div className="placa-etiqueta">Horario de atención</div>
-            <div className="placa-horas">6:00 – 20:00</div>
-            <div className="placa-nota">Todos los días, sujeto a disponibilidad</div>
-          </div>
-        </div>
-      </section>
-
-      {/* Directorio de espacios */}
-      <section id="espacios" className="directorio">
-        <div className="contenedor">
-          <h2>Espacios disponibles</h2>
-          <p className="directorio-subtitulo">
-            Esta es la capacidad de cada espacio. La disponibilidad real por
-            fecha y hora se confirma en el paso de consulta.
-          </p>
-          <div className="lista">
-            {espacios.map((espacio) => (
-              <div className="fila" key={espacio.nombre}>
-                <span className="fila-nombre">{espacio.nombre}</span>
-                <span>
-                  <span className="fila-cupo">{espacio.cupo}</span>
-                  <span className="fila-cupo-etiqueta">puestos</span>
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Paso a paso */}
-      <section id="pasos" className="pasos">
-        <div className="contenedor">
-          <h2>Cómo reservar un espacio</h2>
-          <p className="pasos-subtitulo">
-            El proceso tiene cuatro pasos y toma solo unos minutos.
-          </p>
-          <div className="pasos-lista">
-            {pasos.map((paso) => (
-              <div className="paso" key={paso.numero}>
-                <div className="paso-numero">{paso.numero}</div>
-                <div className="paso-titulo">{paso.titulo}</div>
-                <div className="paso-detalle">{paso.detalle}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Aviso */}
-      <div className="contenedor">
-        <div className="aviso">
-          <div className="aviso-titulo">Recuerda activar tu reserva</div>
-          <div className="aviso-texto">
-            Debes activar tu reserva 5 minutos antes de la hora asignada.
-            Si no la activas a tiempo, el espacio puede liberarse para
-            otro usuario.
-          </div>
-        </div>
-      </div>
-
-        <Footer />
-     
-    </div>
-  );
+  const { isAuthenticated } = useAuth();
+  return <div className="landing">
+    <header className="landing-nav"><Link to="/" className="landing-brand"><span>R</span>Reserva<span>Espacios</span></Link><nav><a href="#espacios">Espacios</a><a href="#como-funciona">Cómo funciona</a><a href="#ayuda">Ayuda</a></nav><div className="landing-actions">{isAuthenticated ? <Link className="btn btn-primary" to="/app/dashboard">Ir a mi panel →</Link> : <><Link to="/InicioSesion" className="login-link">Iniciar sesión</Link><Link to="/Register" className="btn btn-primary">Crear cuenta</Link></>}</div></header>
+    <main>
+      <section className="landing-hero"><div className="hero-copy"><div className="hero-kicker"><span /> Espacios que se adaptan a ti</div><h1>Tu próximo gran<br /><em>momento</em> empieza aquí.</h1><p>Reserva aulas, salas y auditorios de tu universidad de forma simple, rápida y sin cruces de horarios.</p><div className="hero-actions"><Link className="btn btn-primary" to={isAuthenticated ? "/app/reservar" : "/Register"}>Reserva un espacio <span>→</span></Link><a className="text-link" href="#como-funciona">Conoce cómo funciona <span>↓</span></a></div><div className="hero-proof"><div className="proof-avatars"><span>VG</span><span>MR</span><span>AL</span><b>+</b></div><p><strong>+2.400</strong> personas ya reservan<br />sus espacios con nosotros.</p></div></div><div className="hero-visual"><div className="visual-glow" /><div className="visual-card card-back" /><div className="visual-card card-front"><div className="visual-top"><span>Disponibilidad hoy</span><b>● En vivo</b></div><div className="visual-date"><strong>24</strong><span>OCT<br /><small>2026</small></span><i>›</i></div><div className="mini-space"><span className="mini-icon">▦</span><div><strong>Aula flexible 204</strong><small>Edificio A · Piso 2</small></div><b>✓</b></div><div className="mini-space second"><span className="mini-icon green">◈</span><div><strong>Coworking central</strong><small>Biblioteca · Piso 1</small></div><b>✓</b></div><div className="visual-footer"><span>8 espacios disponibles</span><Link to={isAuthenticated ? "/app/reservar" : "/Register"}>Ver disponibilidad →</Link></div></div><div className="float-tag tag-one">⌖ <span><b>300+</b><small>espacios</small></span></div><div className="float-tag tag-two">✦ <span><b>Fácil</b><small>y rápido</small></span></div></div></section>
+      <section className="trust-strip"><span>Diseñado para la comunidad universitaria</span><div><b>●</b> Estudiantes <b>●</b> Docentes <b>●</b> Administrativos <b>●</b> Invitados</div></section>
+      <section id="espacios" className="landing-section spaces-section"><div className="section-intro"><span className="eyebrow">Todo en un mismo lugar</span><h2>Un espacio para<br /><em>cada idea.</em></h2><p>Desde una sesión de estudio hasta el evento más importante del semestre.</p><Link className="text-link" to={isAuthenticated ? "/app/reservar" : "/Register"}>Explorar todos los espacios →</Link></div><div className="home-space-grid">{spaces.slice(0, 4).map((space) => <Link to={isAuthenticated ? "/app/reservar?space=" + space.id : "/Register"} className="home-space-card" key={space.id}><div className="home-space-art" style={{ background: space.color }}><span>{space.icon}</span><small>{space.type}</small></div><div className="home-space-info"><div><h3>{space.name}</h3><p>Hasta {space.capacity} personas</p></div><b>↗</b></div></Link>)}</div></section>
+      <section id="como-funciona" className="landing-section process-section"><div className="process-heading"><span className="eyebrow">Tan simple como debería ser</span><h2>Reserva en <em>tres pasos.</em></h2></div><div className="steps-grid">{steps.map(([number, title, detail]) => <div className="step" key={number}><span>{number}</span><h3>{title}</h3><p>{detail}</p></div>)}</div></section>
+      <section id="ayuda" className="cta-section"><div><span className="eyebrow">¿Listo para empezar?</span><h2>Haz espacio para<br /><em>lo que importa.</em></h2><p>Tu siguiente idea necesita un lugar. Nosotros te ayudamos a encontrarlo.</p><Link to={isAuthenticated ? "/app/reservar" : "/Register"} className="btn btn-primary">Comenzar ahora →</Link></div><div className="cta-symbol">R<span>✦</span></div></section>
+    </main>
+    <Footer />
+  </div>;
 }
