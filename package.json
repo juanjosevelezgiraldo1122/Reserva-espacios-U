@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@rolldown/binding-win32-x64-msvc": "^1.2.13",
+    "firebase": "^13.2.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "react-router-dom": "^7.18.3"

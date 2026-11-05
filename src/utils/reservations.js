@@ -1,4 +1,5 @@
 const KEY = "reserva-espacios-reservas";
+const CHANGE_EVENT = "reservations-changed";
 
 export function readReservations() {
   try { return JSON.parse(localStorage.getItem(KEY)) || []; } catch { return []; }
@@ -6,13 +7,23 @@ export function readReservations() {
 
 export function saveReservations(items) {
   localStorage.setItem(KEY, JSON.stringify(items));
+  window.dispatchEvent(new Event(CHANGE_EVENT));
+}
+
+export function subscribeReservations(callback) {
+  window.addEventListener(CHANGE_EVENT, callback);
+  window.addEventListener("storage", callback);
+  return () => {
+    window.removeEventListener(CHANGE_EVENT, callback);
+    window.removeEventListener("storage", callback);
+  };
 }
 
 export function addReservation(item) {
   const next = {
     ...item,
     id: "res-" + Date.now(),
-    status: item.status || (item.requiresApproval ? "Pendiente de aprobación" : "Pendiente de confirmación"),
+    status: item.status || "Pendiente de aprobación",
     createdAt: new Date().toISOString(),
   };
   saveReservations([next, ...readReservations()]);
