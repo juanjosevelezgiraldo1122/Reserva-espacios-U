@@ -96,7 +96,7 @@ export const spaces = [
   },
 ];
 
-export const timeSlots = ["06:00", "07:30", "09:00", "10:30", "12:00", "14:00", "15:30", "17:00", "18:00"];
+export const timeSlots = ["06:00", "07:30", "09:00", "10:30", "12:00", "14:00", "15:30", "17:00", "18:00", "19:00"];
 
 export function getDateLabel(date) {
   return new Intl.DateTimeFormat("es-CO", { weekday: "long", day: "numeric", month: "long" }).format(new Date(date + "T12:00:00"));
