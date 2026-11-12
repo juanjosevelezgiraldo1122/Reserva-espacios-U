@@ -5,6 +5,7 @@ import Dashboard from "./pages/Dashboard";
 import Booking from "./pages/Booking";
 import Reservations from "./pages/Reservations";
 import Reports from "./pages/Reports";
+import Users from "./pages/Users";
 import Profile from "./pages/Profile";
 import Help from "./pages/Help";
 import Register from "./login/Register";
@@ -42,6 +43,7 @@ function AppRoutes() {
         <Route path="reservar" element={<RutaEstudiante><Booking /></RutaEstudiante>} />
         <Route path="reservas" element={<Reservations />} />
         <Route path="reportes" element={<RutaAdministrador><Reports /></RutaAdministrador>} />
+        <Route path="usuarios" element={<RutaAdministrador><Users /></RutaAdministrador>} />
         <Route path="perfil" element={<Profile />} />
         <Route path="ayuda" element={<Help />} />
       </Route>

@@ -16,6 +16,8 @@ import { firebaseAuth, firebaseConfigured } from "../firebase";
 const AuthContext = createContext(null);
 const USER_KEY = "reserva-espacios-user";
 const USERS_KEY = "reserva-espacios-users";
+const ROLE_AUDIT_KEY = "reserva-espacios-role-audit";
+const USER_DATA_EVENT = "reservation-users-changed";
 
 export const demoUsers = {
   estudiante: {
@@ -40,6 +42,33 @@ export const demoUsers = {
 
 function readUsers() {
   try { return JSON.parse(localStorage.getItem(USERS_KEY)) || []; } catch { return []; }
+}
+
+export function getAdminUsers() {
+  const savedUsers = readUsers();
+  const demoProfiles = Object.values(demoUsers).map((demoUser) => ({
+    ...demoUser,
+    ...savedUsers.find((item) => item.id === demoUser.id),
+    esCuentaPrueba: true,
+  }));
+  const registeredUsers = savedUsers.filter((item) => !Object.values(demoUsers).some((demoUser) => demoUser.id === item.id));
+  return [...demoProfiles, ...registeredUsers].sort((a, b) => `${a.nombres} ${a.apellidos}`.localeCompare(`${b.nombres} ${b.apellidos}`, "es"));
+}
+
+export function getRoleAudit() {
+  try { return JSON.parse(localStorage.getItem(ROLE_AUDIT_KEY)) || []; } catch { return []; }
+}
+
+export function subscribeAdminUserData(callback) {
+  window.addEventListener(USER_DATA_EVENT, callback);
+  const onStorage = (event) => {
+    if ([USERS_KEY, ROLE_AUDIT_KEY].includes(event.key)) callback();
+  };
+  window.addEventListener("storage", onStorage);
+  return () => {
+    window.removeEventListener(USER_DATA_EVENT, callback);
+    window.removeEventListener("storage", onStorage);
+  };
 }
 
 function saveProfile(profile) {
@@ -108,14 +137,34 @@ export function AuthProvider({ children }) {
     else localStorage.removeItem(USER_KEY);
   }, [user]);
 
+  useEffect(() => {
+    if (!user?.id) return undefined;
+    const syncCurrentRole = () => {
+      const profile = readUsers().find((item) => item.id === user.id || item.correo?.toLowerCase() === user.correo?.toLowerCase());
+      if (profile && profile.rol !== user.rol) {
+        setUser((current) => current?.id === user.id ? { ...current, rol: profile.rol } : current);
+      }
+    };
+    const onStorage = (event) => {
+      if (event.key === USERS_KEY) syncCurrentRole();
+    };
+    window.addEventListener(USER_DATA_EVENT, syncCurrentRole);
+    window.addEventListener("storage", onStorage);
+    return () => {
+      window.removeEventListener(USER_DATA_EVENT, syncCurrentRole);
+      window.removeEventListener("storage", onStorage);
+    };
+  }, [user?.id, user?.correo, user?.rol]);
+
   const login = async (correo, contrasena) => {
     const input = correo.trim();
     const normalizedEmail = input.toLowerCase();
     const demoUser = Object.values(demoUsers).find((item) => item.correo === normalizedEmail);
     if (demoUser && contrasena === "Demo123!") {
       if (firebaseConfigured) await signOut(firebaseAuth).catch(() => {});
-      setUser(demoUser);
-      return demoUser;
+      const nextDemoUser = { ...demoUser, ...readUsers().find((item) => item.id === demoUser.id) };
+      setUser(nextDemoUser);
+      return nextDemoUser;
     }
     if (!firebaseConfigured) throw new Error("Firebase aún no está configurado. Las cuentas de prueba siguen disponibles.");
 
@@ -223,11 +272,40 @@ export function AuthProvider({ children }) {
     }
   };
 
+  const updateUserRole = (userId, newRole) => {
+    if (user?.rol !== "Administrador") throw new Error("Solo un administrador puede editar roles.");
+    if (!["Estudiante", "Administrador"].includes(newRole)) throw new Error("Selecciona un rol válido.");
+    const target = getAdminUsers().find((item) => item.id === userId);
+    if (!target) throw new Error("No encontramos ese usuario.");
+    if (target.id === user.id || target.correo === user.correo) throw new Error("No puedes cambiar el rol de tu propia cuenta.");
+    if (target.rol === newRole) return;
+
+    const safeTarget = { ...target };
+    delete safeTarget.contrasena;
+    delete safeTarget.esCuentaPrueba;
+    saveProfile({ ...safeTarget, rol: newRole });
+    const audit = getRoleAudit();
+    audit.unshift({
+      id: `role-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+      userId: target.id,
+      userName: `${target.nombres || ""} ${target.apellidos || ""}`.trim() || target.correo,
+      userEmail: target.correo,
+      previousRole: target.rol,
+      newRole,
+      changedById: user.id,
+      changedByName: `${user.nombres || ""} ${user.apellidos || ""}`.trim() || user.correo,
+      changedByEmail: user.correo,
+      changedAt: new Date().toISOString(),
+    });
+    localStorage.setItem(ROLE_AUDIT_KEY, JSON.stringify(audit.slice(0, 500)));
+    window.dispatchEvent(new Event(USER_DATA_EVENT));
+  };
+
   const logout = async () => {
     setUser(null);
     if (firebaseConfigured) await signOut(firebaseAuth).catch(() => {});
   };
-  const value = useMemo(() => ({ user, authReady, isAuthenticated: Boolean(user), login, loginWithGoogle, register, recoverPassword, logout, demoUsers }), [user, authReady]);
+  const value = useMemo(() => ({ user, authReady, isAuthenticated: Boolean(user), login, loginWithGoogle, register, recoverPassword, updateUserRole, logout, demoUsers }), [user, authReady]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

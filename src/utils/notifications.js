@@ -113,6 +113,22 @@ export function notifyReservationApproved(reservation) {
   });
 }
 
+export function notifySpecialPermitDecision(permit, approved) {
+  if (!permit?.user) return;
+  const notifications = readNotifications(permit.user);
+  addIfMissing(permit.user, notifications, {
+    id: `${permit.id}:${approved ? "approved" : "rejected"}`,
+    type: approved ? "permit-approved" : "permit-rejected",
+    title: approved ? "Permiso especial aprobado" : "Permiso especial rechazado",
+    message: approved
+      ? `El administrador aprobó un permiso para una reserva adicional. Ya puedes enviar la solicitud para ${permit.requestedSpaceName} en ${permit.date}, sujeto a disponibilidad.`
+      : "El administrador rechazó la solicitud de permiso especial. Puedes consultar con la oficina del campus si necesitas una excepción.",
+    actionLabel: "Ir a reservar →",
+    time: Date.now(),
+    read: false,
+  });
+}
+
 export function checkReservationReminders(email) {
   if (!email) return;
   const now = Date.now();

@@ -18,10 +18,10 @@ export default function LayoutPrivado() {
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const initials = (user?.nombres?.[0] || "U") + (user?.apellidos?.[0] || "");
   const visibleNavItems = user?.rol === "Administrador"
-    ? [...navItems.filter((item) => item.to !== "/app/reservar"), { to: "/app/reportes", label: "Reportes", icon: "▥" }]
+    ? [...navItems.filter((item) => item.to !== "/app/reservar"), { to: "/app/reportes", label: "Reportes", icon: "▥" }, { to: "/app/usuarios", label: "Usuarios", icon: "♙" }]
     : navItems;
   const salir = () => { logout(); navigate("/"); };
-  const pageName = location.pathname.includes("reportes") ? "Reportes agregados" : location.pathname.includes("reservar") ? "Reservar espacio" : location.pathname.includes("reservas") ? (user?.rol === "Administrador" ? "Gestionar reservas" : "Mis reservas") : location.pathname.includes("perfil") ? "Mi perfil" : location.pathname.includes("ayuda") ? "Centro de ayuda" : "Resumen";
+  const pageName = location.pathname.includes("usuarios") ? "Usuarios y roles" : location.pathname.includes("reportes") ? "Reportes agregados" : location.pathname.includes("reservar") ? "Reservar espacio" : location.pathname.includes("reservas") ? (user?.rol === "Administrador" ? "Gestionar reservas" : "Mis reservas") : location.pathname.includes("perfil") ? "Mi perfil" : location.pathname.includes("ayuda") ? "Centro de ayuda" : "Resumen";
 
   useEffect(() => {
     const email = user?.correo;
